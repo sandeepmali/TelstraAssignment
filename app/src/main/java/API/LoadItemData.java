@@ -1,6 +1,6 @@
 package API;
 
-import pojo.ItemData;
+import pojo.ItemDataObj;
 
 import java.util.ArrayList;
 
@@ -14,7 +14,7 @@ import retrofit2.http.GET;
 public interface LoadItemData {
 
     @GET("json/movies.json")
-    Call<ArrayList<ItemData>> loadData();
+    Call<ArrayList<ItemDataObj>> loadData();
 
 }
 

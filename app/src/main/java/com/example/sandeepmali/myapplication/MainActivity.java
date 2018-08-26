@@ -18,14 +18,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import dataAdapter.RecyclerAdapter;
-import pojo.ItemData;
+import pojo.ItemDataObj;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity implements Callback<ArrayList<ItemData>> {
+public class MainActivity extends AppCompatActivity implements Callback<ArrayList<ItemDataObj>> {
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements Callback<ArrayLis
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerAdapter recyclerAdapter;
     private Unbinder unbinder;
-    private Call<ArrayList<ItemData>> apiCall;
+    private Call<ArrayList<ItemDataObj>> apiCall;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,15 +126,15 @@ public class MainActivity extends AppCompatActivity implements Callback<ArrayLis
 
 
     @Override
-    public void onResponse(Call<ArrayList<ItemData>> call, Response<ArrayList<ItemData>> response) {
+    public void onResponse(Call<ArrayList<ItemDataObj>> call, Response<ArrayList<ItemDataObj>> response) {
         progressBar.setVisibility(View.GONE);
-        ArrayList<ItemData> itemList;
+        ArrayList<ItemDataObj> itemList;
         itemList = response.body();
         setRecyclerData(itemList);
     }
 
     @Override
-    public void onFailure(Call<ArrayList<ItemData>> call, Throwable t) {
+    public void onFailure(Call<ArrayList<ItemDataObj>> call, Throwable t) {
         if (unbinder != null) {
             progressBar.setVisibility(View.GONE);
             recyclerView.setVisibility(View.GONE);
@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements Callback<ArrayLis
      *
      * @param itemList
      */
-    private void setRecyclerData(ArrayList<ItemData> itemList) {
+    private void setRecyclerData(ArrayList<ItemDataObj> itemList) {
         recyclerAdapter = new RecyclerAdapter(MainActivity.this, itemList);
         recyclerView.setVisibility(View.VISIBLE);
         recyclerView.setAdapter(recyclerAdapter);

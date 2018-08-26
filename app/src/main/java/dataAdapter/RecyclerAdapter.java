@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.sandeepmali.myapplication.R;
-import pojo.ItemData;
+import pojo.ItemDataObj;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -23,10 +23,10 @@ import butterknife.ButterKnife;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
-    private ArrayList<ItemData> dataList;
+    private ArrayList<ItemDataObj> dataList;
     private Context context;
 
-    public RecyclerAdapter(Context context ,ArrayList<ItemData> dataList) {
+    public RecyclerAdapter(Context context ,ArrayList<ItemDataObj> dataList) {
         this.dataList = dataList;
         this.context = context;
     }
@@ -60,11 +60,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @Override
     public void onBindViewHolder(RecyclerAdapter.ViewHolder holder, int position) {
         if(holder!=null){
-            ItemData itemData = dataList.get(position);
-            holder.txt_main_header.setText(itemData.getTitle());
-            holder.txt_sub_header.setText("Release Year :"+ itemData.getReleaseYear()+" , \n"+ "Rating : "+ itemData.getRating());
+            ItemDataObj itemDataObj = dataList.get(position);
+            holder.txt_main_header.setText(itemDataObj.getTitle());
+            holder.txt_sub_header.setText("Release Year :"+ itemDataObj.getReleaseYear()+" , \n"+ "Rating : "+ itemDataObj.getRating());
             Picasso.with(context)
-                    .load(itemData.getImage())
+                    .load(itemDataObj.getImage())
                     .placeholder(R.drawable.camera)
                     .error(R.drawable.camera)
                     .into(holder.img_movie);

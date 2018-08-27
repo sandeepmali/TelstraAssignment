@@ -3,10 +3,12 @@ package com.example.sandeepmali.myapplication;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -37,12 +39,15 @@ public class MainActivity extends AppCompatActivity implements Callback<ArrayLis
     private RecyclerAdapter recyclerAdapter;
     private Unbinder unbinder;
     private Call<ArrayList<ItemDataObj>> apiCall;
+    private static ArrayList<ItemDataObj> itemList = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         unbinder = ButterKnife.bind(MainActivity.this);
+
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -50,7 +55,13 @@ public class MainActivity extends AppCompatActivity implements Callback<ArrayLis
         recyclerView.setItemViewCacheSize(20);
         recyclerView.setDrawingCacheEnabled(true);
         recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
-        loadListDetails();
+        if (itemList.size() == 0)
+            loadListDetails();
+        else {
+            progressBar.setVisibility(View.GONE);
+            setRecyclerData(itemList);
+
+        }
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -86,9 +97,6 @@ public class MainActivity extends AppCompatActivity implements Callback<ArrayLis
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (!apiCall.isCanceled() || !apiCall.isExecuted()) {
-            apiCall.cancel();
-        }
         unbinder.unbind();
         unbinder = null;
 
@@ -111,12 +119,29 @@ public class MainActivity extends AppCompatActivity implements Callback<ArrayLis
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.option_menu, menu);
+        return true;
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case R.id.search:
+                refreshLayout.setRefreshing(false);
+                recyclerView.removeAllViews();
+                if (recyclerAdapter != null)
+                    recyclerAdapter.clearData();
+                loadListDetails();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -128,7 +153,6 @@ public class MainActivity extends AppCompatActivity implements Callback<ArrayLis
     @Override
     public void onResponse(Call<ArrayList<ItemDataObj>> call, Response<ArrayList<ItemDataObj>> response) {
         progressBar.setVisibility(View.GONE);
-        ArrayList<ItemDataObj> itemList;
         itemList = response.body();
         setRecyclerData(itemList);
     }
@@ -148,6 +172,11 @@ public class MainActivity extends AppCompatActivity implements Callback<ArrayLis
      * @param itemList
      */
     private void setRecyclerData(ArrayList<ItemDataObj> itemList) {
+        /**
+         * Set Action bar Title. Currently Json data is not working so, hard coded.
+         */
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("Telstra");
         recyclerAdapter = new RecyclerAdapter(MainActivity.this, itemList);
         recyclerView.setVisibility(View.VISIBLE);
         recyclerView.setAdapter(recyclerAdapter);

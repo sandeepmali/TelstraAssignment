@@ -64,10 +64,6 @@ public class MainActivity extends AppCompatActivity implements Callback<ArrayLis
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refreshLayout.setRefreshing(false);
-                recyclerView.removeAllViews();
-                if (recyclerAdapter != null)
-                    recyclerAdapter.clearData();
                 loadListDetails();
             }
         });
@@ -132,10 +128,6 @@ public class MainActivity extends AppCompatActivity implements Callback<ArrayLis
         switch (item.getItemId())
         {
             case R.id.search:
-                refreshLayout.setRefreshing(false);
-                recyclerView.removeAllViews();
-                if (recyclerAdapter != null)
-                    recyclerAdapter.clearData();
                 loadListDetails();
                 return true;
             default:
@@ -185,6 +177,10 @@ public class MainActivity extends AppCompatActivity implements Callback<ArrayLis
      * Call Api and load data from server
      */
     private void loadListDetails() {
+        refreshLayout.setRefreshing(false);
+        recyclerView.removeAllViews();
+        if (recyclerAdapter != null)
+            recyclerAdapter.clearData();
         progressBar.setVisibility(View.VISIBLE);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.androidhive.info")

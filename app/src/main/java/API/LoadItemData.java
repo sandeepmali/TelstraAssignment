@@ -1,9 +1,6 @@
 package API;
 
-import pojo.ItemDataObj;
-
-import java.util.ArrayList;
-
+import model.ItemDataObj;
 import retrofit2.Call;
 import retrofit2.http.GET;
 
@@ -13,8 +10,8 @@ import retrofit2.http.GET;
 
 public interface LoadItemData {
 
-    @GET("json/movies.json")
-    Call<ArrayList<ItemDataObj>> loadData();
+    @GET("facts.js")
+    Call<ItemDataObj> loadData();
 
 }
 

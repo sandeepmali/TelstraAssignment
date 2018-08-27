@@ -9,13 +9,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.sandeepmali.myapplication.R;
-import pojo.ItemDataObj;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import model.Row;
 
 /**
  * Created by sandeepmali on 25/08/18.
@@ -23,25 +23,12 @@ import butterknife.ButterKnife;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
-    private ArrayList<ItemDataObj> dataList;
+    private ArrayList<Row> dataList;
     private Context context;
 
-    public RecyclerAdapter(Context context ,ArrayList<ItemDataObj> dataList) {
+    public RecyclerAdapter(Context context, ArrayList<Row> dataList) {
         this.dataList = dataList;
         this.context = context;
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.txt_main_header) TextView txt_main_header;
-        @BindView(R.id.txt_sub_header) TextView txt_sub_header;
-        @BindView(R.id.img_movie)
-        ImageView  img_movie;
-
-        public ViewHolder(View itemView) {
-
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
     }
 
     @Override
@@ -59,15 +46,19 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(RecyclerAdapter.ViewHolder holder, int position) {
-        if(holder!=null){
-            ItemDataObj itemDataObj = dataList.get(position);
-            holder.txt_main_header.setText(itemDataObj.getTitle());
-            holder.txt_sub_header.setText("Release Year :"+ itemDataObj.getReleaseYear()+" , \n"+ "Rating : "+ itemDataObj.getRating());
-            Picasso.with(context)
-                    .load(itemDataObj.getImage())
-                    .placeholder(R.drawable.camera)
-                    .error(R.drawable.camera)
-                    .into(holder.img_movie);
+        if (holder != null) {
+
+            Row row = dataList.get(position);
+            if (row.getTitle() != null)
+                holder.txt_main_header.setText(row.getTitle());
+            if (row.getDescription() != null)
+                holder.txt_sub_header.setText(row.getDescription());
+            if (row.getImageHref() != null)
+                Picasso.with(context)
+                        .load(row.getImageHref().toString())
+                        .placeholder(R.drawable.camera)
+                        .error(R.drawable.camera)
+                        .into(holder.img_movie);
         }
 
     }
@@ -83,5 +74,20 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public void clearData() {
         dataList.clear();
         notifyDataSetChanged();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.txt_main_header)
+        TextView txt_main_header;
+        @BindView(R.id.txt_sub_header)
+        TextView txt_sub_header;
+        @BindView(R.id.img_movie)
+        ImageView img_movie;
+
+        public ViewHolder(View itemView) {
+
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
     }
 }

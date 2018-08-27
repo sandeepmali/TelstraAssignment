@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity implements Callback<ArrayLis
     private Unbinder unbinder;
     private Call<ArrayList<ItemDataObj>> apiCall;
     private static ArrayList<ItemDataObj> itemList = new ArrayList<>();
-ssd
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
